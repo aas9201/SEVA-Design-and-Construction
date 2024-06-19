@@ -88,6 +88,40 @@ def sort_sites(plasmid_sequence):
             plasmid_order != correct_order
         ):  # Checks to see if the plasmid has correct order/structure
             raise ValueError("Please make sure plasmid is of valid SEVA Format")
+        
+        recognition_sites = {
+                    "HindIII": "AAGCTT",
+                    "PstI": "CTGCAG",
+                    "XbaI": "TCTAGA",
+                    "BamHI": "GGATCC",
+                    "SmaI": "CCCGGG",
+                    "KpnI": "GGTACC",
+                    "SacI": "GAGCTC",
+                    "SalI": "GTCGAC",
+                    "EcoRI": "GAATTC",
+                    "SfiI": "GGCCNNNNNGGCC",  
+                    "SphI": "GCATGC",
+                    "AvrII": "CCTAGG", 
+                    "SanDI": "GCCGGC",     
+                    "NotI": "GCGGCCGC"
+                }
+    
+        re_positions = {}
+
+        for site_name, site_sequence in recognition_sites.items():
+            pattern = re.sub('N', '[ACGT]', site_sequence)
+            positions = []
+
+            for i in range(len(plasmid_sequence)):
+                if re.match(pattern, plasmid_sequence[i:]):
+                    positions.append(i+1)
+            
+            if positions:
+                re_positions[site_name] = positions
+
+        
+        for site_name, positions in re_positions.items():
+            print(f"{site_name} is found at positions: {positions}")
 
         return sorted_sites
     
@@ -966,25 +1000,5 @@ def import_insert_parameters(csv_filename, input_csv):
         os.startfile(f"{path}\{csv_filename}_experimental_data.csv")
 
 
-input1 = [
-    ['tester1', 289, 'plasmid1test', 16, 2086, 'BamHI', 'SalI'],
-    ['tester1', 289, 'plasmid2test', 16, 2086, 'EcoRI', 'PstI'],
-    ['tester2', 345, 'plasmid3test', 150, 1999, 'SacI', 'HindIII'],
-    ['tester3', 410, 'plasmid4test', 200, 1800, 'BamHI', 'SalI'],
-    ['tester4', 512, 'plasmid5test', 300, 1700, 'EcoRI', 'HindIII'],
-    ['tester5', 620, 'plasmid6test', 400, 1600, 'SacI', 'PstI'],
-    ['tester6', 730, 'plasmid7test', 500, 1500, 'BamHI', 'SalI'],
-    ['tester7', 840, 'plasmid8test', 600, 1400, 'EcoRI', 'PstI'],
-    ['tester8', 950, 'plasmid9test', 700, 1300, 'SacI', 'HindIII'],
-    ['tester9', 1060, 'plasmid10test', 800, 1200, 'BamHI', 'SalI'],
-    ['tester10', 1170, 'plasmid11test', 900, 1100, 'EcoRI', 'HindIII'],
-    ['tester11', 1280, 'plasmid12test', 1000, 1000, 'SacI', 'PstI'],
-    ['tester12', 1390, 'plasmid13test', 1100, 900, 'BamHI', 'SalI'],
-    ['tester13', 1500, 'plasmid14test', 1200, 800, 'EcoRI', 'HindIII'],
-    ['tester14', 1610, 'plasmid15test', 1300, 700, 'SacI', 'PstI'],
-    ['tester15', 1720, 'plasmid16test', 1400, 600, 'BamHI', 'SalI'],
-    ['tester16', 1830, 'plasmid17test', 1500, 500, 'EcoRI', 'HindIII'],
-    ['tester17', 1940, 'plasmid18test', 1600, 400, 'SacI', 'PstI'],
-    ['tester18', 2050, 'plasmid19test', 1700, 300, 'BamHI', 'SalI'],
-    ['tester19', 2160, 'plasmid20test', 1800, 200, 'EcoRI', 'HindIII']
-]
+
+
